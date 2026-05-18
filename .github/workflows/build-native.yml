@@ -1,0 +1,63 @@
+name: build-native
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'external/soloud/**'
+      - 'build/CMakeLists.txt'
+      - 'build/build-native-*.sh'
+      - 'build/build-native-*.ps1'
+      - '.github/workflows/build-native.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-native-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.rid }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - rid: win-x64
+            runner: windows-2022
+            script: pwsh build/build-native-win.ps1
+          - rid: linux-x64
+            runner: ubuntu-22.04
+            script: bash build/build-native-unix.sh linux-x64
+          - rid: osx-x64
+            runner: macos-latest
+            script: bash build/build-native-unix.sh osx-x64
+
+    steps:
+      - name: Checkout (with submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Set up MSVC (Windows)
+        if: matrix.rid == 'win-x64'
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build native library (${{ matrix.rid }})
+        shell: bash
+        run: ${{ matrix.script }}
+
+      - name: Upload SoLoud shared library
+        uses: actions/upload-artifact@v4
+        with:
+          name: soloud-native-${{ matrix.rid }}
+          path: artifacts/native/${{ matrix.rid }}/
+          if-no-files-found: error
+          retention-days: 14

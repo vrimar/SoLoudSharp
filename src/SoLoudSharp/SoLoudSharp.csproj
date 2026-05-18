@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+    <RootNamespace>SoLoudSharp</RootNamespace>
+    <AssemblyName>SoLoudSharp</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Nullable>enable</Nullable>
+    <IsPackable>true</IsPackable>
+    <PackageId>SoLoudSharp</PackageId>
+    <Description>Cross-platform .NET bindings for the SoLoud audio engine, with native binaries bundled for win-x64, linux-x64, and osx-x64. Uses the self-contained miniaudio backend.</Description>
+    <PackageTags>soloud;audio;sound;native;miniaudio;wav;mp3;ogg</PackageTags>
+
+    <IsAotCompatible>true</IsAotCompatible>
+    <IsTrimmable>true</IsTrimmable>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <EnableAotAnalyzer>true</EnableAotAnalyzer>
+
+    <NativeArtifactsDir Condition="'$(NativeArtifactsDir)' == ''">$(MSBuildThisFileDirectory)..\..\artifacts\native\</NativeArtifactsDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(NativeArtifactsDir)win-x64\soloud.dll"      Pack="true" PackagePath="runtimes\win-x64\native\"   Condition="Exists('$(NativeArtifactsDir)win-x64\soloud.dll')" />
+    <None Include="$(NativeArtifactsDir)linux-x64\libsoloud.so"  Pack="true" PackagePath="runtimes\linux-x64\native\" Condition="Exists('$(NativeArtifactsDir)linux-x64\libsoloud.so')" />
+    <None Include="$(NativeArtifactsDir)osx-x64\libsoloud.dylib" Pack="true" PackagePath="runtimes\osx-x64\native\"   Condition="Exists('$(NativeArtifactsDir)osx-x64\libsoloud.dylib')" />
+  </ItemGroup>
+
+  <Target Name="WarnIfNoNatives" BeforeTargets="Pack" Condition="'$(SkipNativeWarning)' != 'true'">
+    <Warning Code="SOLOUDNET001" Text="No native libraries found in $(NativeArtifactsDir). The package will ship without native binaries. Set NativeArtifactsDir or place artifacts in the expected layout. Set SkipNativeWarning=true to silence."
+             Condition="!Exists('$(NativeArtifactsDir)win-x64\soloud.dll') and !Exists('$(NativeArtifactsDir)linux-x64\libsoloud.so') and !Exists('$(NativeArtifactsDir)osx-x64\libsoloud.dylib')" />
+  </Target>
+
+</Project>

@@ -1,0 +1,25 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.userprefs
+.vs/
+.vscode/
+.idea/
+*.swp
+*.DS_Store
+Thumbs.db
+
+# Packages and outputs
+artifacts/
+out/
+publish/
+*.nupkg
+*.snupkg
+local-feed/
+
+# Native build outputs
+.build/
+build/build-*/
+build/*.log
