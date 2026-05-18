@@ -24,9 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="$(NativeArtifactsDir)win-x64\soloud.dll"      Pack="true" PackagePath="runtimes\win-x64\native\"   Condition="Exists('$(NativeArtifactsDir)win-x64\soloud.dll')" />
-    <None Include="$(NativeArtifactsDir)linux-x64\libsoloud.so"  Pack="true" PackagePath="runtimes\linux-x64\native\" Condition="Exists('$(NativeArtifactsDir)linux-x64\libsoloud.so')" />
-    <None Include="$(NativeArtifactsDir)osx-x64\libsoloud.dylib" Pack="true" PackagePath="runtimes\osx-x64\native\"   Condition="Exists('$(NativeArtifactsDir)osx-x64\libsoloud.dylib')" />
+    <None Include="$(NativeArtifactsDir)win-x64\soloud.dll"      Pack="true" PackagePath="runtimes/win-x64/native/soloud.dll"      Condition="Exists('$(NativeArtifactsDir)win-x64\soloud.dll')" />
+    <None Include="$(NativeArtifactsDir)linux-x64\libsoloud.so"  Pack="true" PackagePath="runtimes/linux-x64/native/libsoloud.so"  Condition="Exists('$(NativeArtifactsDir)linux-x64\libsoloud.so')" />
+    <None Include="$(NativeArtifactsDir)osx-x64\libsoloud.dylib" Pack="true" PackagePath="runtimes/osx-x64/native/libsoloud.dylib" Condition="Exists('$(NativeArtifactsDir)osx-x64\libsoloud.dylib')" />
   </ItemGroup>
 
   <Target Name="WarnIfNoNatives" BeforeTargets="Pack" Condition="'$(SkipNativeWarning)' != 'true'">
