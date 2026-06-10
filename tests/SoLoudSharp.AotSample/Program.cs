@@ -8,9 +8,10 @@ using SoLoudSharp;
 // library may not be deployed alongside the AOT executable in all CI lanes;
 // the test is purely compile-time + boot-time.
 
-var revision = typeof(SoloudBackend).Assembly
-    .GetCustomAttributes<AssemblyMetadataAttribute>()
-    .FirstOrDefault(a => a.Key == "SoLoudRevision")?.Value;
+var revision = typeof(SoloudBackend)
+    .Assembly.GetCustomAttributes<AssemblyMetadataAttribute>()
+    .FirstOrDefault(a => a.Key == "SoLoudRevision")
+    ?.Value;
 
 Console.WriteLine($"SoLoudSharp AOT sample. Pinned SoLoud revision: {revision ?? "(unknown)"}.");
 

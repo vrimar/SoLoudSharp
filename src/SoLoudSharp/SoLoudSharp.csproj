@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
     <RootNamespace>SoLoudSharp</RootNamespace>
@@ -16,7 +15,9 @@
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
     <EnableAotAnalyzer>true</EnableAotAnalyzer>
 
-    <NativeArtifactsDir Condition="'$(NativeArtifactsDir)' == ''">$(MSBuildThisFileDirectory)..\..\artifacts\native\</NativeArtifactsDir>
+    <NativeArtifactsDir Condition="'$(NativeArtifactsDir)' == ''"
+      >$(MSBuildThisFileDirectory)..\..\artifacts\native\</NativeArtifactsDir
+    >
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,14 +25,31 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="$(NativeArtifactsDir)win-x64\soloud.dll"      Pack="true" PackagePath="runtimes/win-x64/native/soloud.dll"      Condition="Exists('$(NativeArtifactsDir)win-x64\soloud.dll')" />
-    <None Include="$(NativeArtifactsDir)linux-x64\libsoloud.so"  Pack="true" PackagePath="runtimes/linux-x64/native/libsoloud.so"  Condition="Exists('$(NativeArtifactsDir)linux-x64\libsoloud.so')" />
-    <None Include="$(NativeArtifactsDir)osx-x64\libsoloud.dylib" Pack="true" PackagePath="runtimes/osx-x64/native/libsoloud.dylib" Condition="Exists('$(NativeArtifactsDir)osx-x64\libsoloud.dylib')" />
+    <None
+      Include="$(NativeArtifactsDir)win-x64\soloud.dll"
+      Pack="true"
+      PackagePath="runtimes/win-x64/native/soloud.dll"
+      Condition="Exists('$(NativeArtifactsDir)win-x64\soloud.dll')"
+    />
+    <None
+      Include="$(NativeArtifactsDir)linux-x64\libsoloud.so"
+      Pack="true"
+      PackagePath="runtimes/linux-x64/native/libsoloud.so"
+      Condition="Exists('$(NativeArtifactsDir)linux-x64\libsoloud.so')"
+    />
+    <None
+      Include="$(NativeArtifactsDir)osx-x64\libsoloud.dylib"
+      Pack="true"
+      PackagePath="runtimes/osx-x64/native/libsoloud.dylib"
+      Condition="Exists('$(NativeArtifactsDir)osx-x64\libsoloud.dylib')"
+    />
   </ItemGroup>
 
   <Target Name="WarnIfNoNatives" BeforeTargets="Pack" Condition="'$(SkipNativeWarning)' != 'true'">
-    <Warning Code="SOLOUDNET001" Text="No native libraries found in $(NativeArtifactsDir). The package will ship without native binaries. Set NativeArtifactsDir or place artifacts in the expected layout. Set SkipNativeWarning=true to silence."
-             Condition="!Exists('$(NativeArtifactsDir)win-x64\soloud.dll') and !Exists('$(NativeArtifactsDir)linux-x64\libsoloud.so') and !Exists('$(NativeArtifactsDir)osx-x64\libsoloud.dylib')" />
+    <Warning
+      Code="SOLOUDNET001"
+      Text="No native libraries found in $(NativeArtifactsDir). The package will ship without native binaries. Set NativeArtifactsDir or place artifacts in the expected layout. Set SkipNativeWarning=true to silence."
+      Condition="!Exists('$(NativeArtifactsDir)win-x64\soloud.dll') and !Exists('$(NativeArtifactsDir)linux-x64\libsoloud.so') and !Exists('$(NativeArtifactsDir)osx-x64\libsoloud.dylib')"
+    />
   </Target>
-
 </Project>

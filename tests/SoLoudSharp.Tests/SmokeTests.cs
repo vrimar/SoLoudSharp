@@ -8,12 +8,15 @@ public class SmokeTests
     [Fact]
     public void AssemblyEmbedsSoLoudRevision()
     {
-        var attr = typeof(SoloudBackend).Assembly
-            .GetCustomAttributes<AssemblyMetadataAttribute>()
+        var attr = typeof(SoloudBackend)
+            .Assembly.GetCustomAttributes<AssemblyMetadataAttribute>()
             .FirstOrDefault(a => a.Key == "SoLoudRevision");
 
         Assert.NotNull(attr);
-        Assert.False(string.IsNullOrEmpty(attr!.Value), "SoLoudRevision metadata should be populated.");
+        Assert.False(
+            string.IsNullOrEmpty(attr!.Value),
+            "SoLoudRevision metadata should be populated."
+        );
     }
 
     [Fact]
@@ -25,15 +28,19 @@ public class SmokeTests
     [SkippableFact]
     public void MiniAudioInitAndDeinit()
     {
-        Skip.IfNot(NativeLibraryPresent(), "SoLoud native library not deployed; per-RID smoke job (package.yml) runs this with the lib staged.");
+        Skip.IfNot(
+            NativeLibraryPresent(),
+            "SoLoud native library not deployed; per-RID smoke job (package.yml) runs this with the lib staged."
+        );
 
         using var soloud = new Soloud();
         var result = soloud.Init(
             flags: SoloudInitFlags.ClipRoundoff,
             backend: SoloudBackend.MiniAudio,
-            samplerate: 0,  // AUTO
-            bufferSize: 0,  // AUTO
-            channels: 2);
+            samplerate: 0, // AUTO
+            bufferSize: 0, // AUTO
+            channels: 2
+        );
         Assert.Equal(SoloudResult.Ok, result);
 
         try

@@ -1,5 +1,4 @@
 <Project>
-
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
@@ -11,14 +10,20 @@
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
 
     <Deterministic>true</Deterministic>
-    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'"
+      >true</ContinuousIntegrationBuild
+    >
 
     <Authors>SoLoudSharp contributors</Authors>
     <Company>SoLoudSharp</Company>
     <Copyright>Copyright (c) SoLoudSharp contributors</Copyright>
     <PackageLicenseExpression>Zlib</PackageLicenseExpression>
-    <GitHubRepositoryOwner Condition="'$(GITHUB_REPOSITORY_OWNER)' != ''">$(GITHUB_REPOSITORY_OWNER)</GitHubRepositoryOwner>
-    <GitHubRepositoryOwner Condition="'$(GitHubRepositoryOwner)' == ''">vrimar</GitHubRepositoryOwner>
+    <GitHubRepositoryOwner Condition="'$(GITHUB_REPOSITORY_OWNER)' != ''"
+      >$(GITHUB_REPOSITORY_OWNER)</GitHubRepositoryOwner
+    >
+    <GitHubRepositoryOwner Condition="'$(GitHubRepositoryOwner)' == ''"
+      >vrimar</GitHubRepositoryOwner
+    >
     <PackageProjectUrl>https://github.com/$(GitHubRepositoryOwner)/SoLoudSharp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/$(GitHubRepositoryOwner)/SoLoudSharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -33,9 +38,23 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsPackable)' == 'true'">
-    <None Include="$(MSBuildThisFileDirectory)README.md"               Pack="true" PackagePath="\" Condition="Exists('$(MSBuildThisFileDirectory)README.md')" />
-    <None Include="$(MSBuildThisFileDirectory)LICENSE"                 Pack="true" PackagePath="\" Condition="Exists('$(MSBuildThisFileDirectory)LICENSE')" />
-    <None Include="$(MSBuildThisFileDirectory)THIRD-PARTY-NOTICES.md"  Pack="true" PackagePath="\" Condition="Exists('$(MSBuildThisFileDirectory)THIRD-PARTY-NOTICES.md')" />
+    <None
+      Include="$(MSBuildThisFileDirectory)README.md"
+      Pack="true"
+      PackagePath="\"
+      Condition="Exists('$(MSBuildThisFileDirectory)README.md')"
+    />
+    <None
+      Include="$(MSBuildThisFileDirectory)LICENSE"
+      Pack="true"
+      PackagePath="\"
+      Condition="Exists('$(MSBuildThisFileDirectory)LICENSE')"
+    />
+    <None
+      Include="$(MSBuildThisFileDirectory)THIRD-PARTY-NOTICES.md"
+      Pack="true"
+      PackagePath="\"
+      Condition="Exists('$(MSBuildThisFileDirectory)THIRD-PARTY-NOTICES.md')"
+    />
   </ItemGroup>
-
 </Project>
