@@ -120,6 +120,13 @@ if(APPLE)
     )
 endif()
 
+if(ANDROID)
+    # AAudio/OpenSL ES are dlopen'd at runtime by miniaudio; only liblog is linked.
+    target_link_libraries(soloud PRIVATE log)
+    # Required for Google Play (apps targeting Android 15+): 16 KB page alignment.
+    target_link_options(soloud PRIVATE "-Wl,-z,max-page-size=16384")
+endif()
+
 # Produce predictable output names: soloud.dll / libsoloud.so / libsoloud.dylib
 set_target_properties(soloud PROPERTIES
     OUTPUT_NAME soloud

@@ -36,6 +36,15 @@ jobs:
           - rid: osx-x64
             runner: macos-latest
             script: bash build/build-native-unix.sh osx-x64
+          - rid: android-arm64
+            runner: ubuntu-22.04
+            script: bash build/build-native-android.sh android-arm64
+          - rid: android-arm
+            runner: ubuntu-22.04
+            script: bash build/build-native-android.sh android-arm
+          - rid: android-x64
+            runner: ubuntu-22.04
+            script: bash build/build-native-android.sh android-x64
 
     steps:
       - name: Checkout (with submodules)
