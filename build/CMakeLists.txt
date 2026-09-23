@@ -92,7 +92,11 @@ if(WIN32)
     list(APPEND SOLOUD_SOURCES ${SOLOUD_SRC}/c_api/soloud.def)
 endif()
 
-add_library(soloud SHARED ${SOLOUD_SOURCES})
+# WebAssembly links statically into the host runtime, so there is no shared
+# library to produce there.
+set(SOLOUD_LIBRARY_TYPE SHARED CACHE STRING "SHARED or STATIC")
+
+add_library(soloud ${SOLOUD_LIBRARY_TYPE} ${SOLOUD_SOURCES})
 
 target_include_directories(soloud PRIVATE
     ${SOLOUD_ROOT}/include
@@ -106,6 +110,10 @@ if(MSVC)
     # On MSVC, soloud.def is consumed by the linker; setting it as a source
     # above already does the right thing. Suppress noisy CRT warnings.
     target_compile_definitions(soloud PRIVATE _CRT_SECURE_NO_WARNINGS)
+elseif(EMSCRIPTEN)
+    # miniaudio drives WebAudio here; the browser owns the audio thread, so no
+    # pthreads and nothing to dlopen.
+    target_compile_options(soloud PRIVATE -Wall -Wno-unused-parameter -Wno-sign-compare)
 else()
     target_compile_options(soloud PRIVATE -Wall -Wno-unused-parameter -Wno-sign-compare)
     find_package(Threads REQUIRED)
@@ -131,4 +139,5 @@ endif()
 set_target_properties(soloud PROPERTIES
     OUTPUT_NAME soloud
     PREFIX "${CMAKE_SHARED_LIBRARY_PREFIX}"
+    ARCHIVE_OUTPUT_NAME soloud
 )

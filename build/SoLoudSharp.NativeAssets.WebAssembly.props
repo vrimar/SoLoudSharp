@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!--
+    Ships under buildTransitive/netstandard1.0/ so it reaches consumers through
+    a package reference. Archives sit alongside in soloud.a/<emscripten-version>/,
+    keyed by version because wasm objects only link against a .NET runtime pack
+    built with the same emsdk.
+
+    The archive is named without a lib prefix on purpose: the wasm pinvoke table
+    matches [DllImport("soloud")] against the archive's file stem.
+  -->
+  <PropertyGroup>
+    <SoLoudStaticLibraryPath>$(MSBuildThisFileDirectory)soloud.a</SoLoudStaticLibraryPath>
+    <SoLoudEmscriptenVersion Condition="'$(SoLoudEmscriptenVersion)' == ''">3.1.56</SoLoudEmscriptenVersion>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm'">
+    <SoLoudStaticLibrary Include="$(SoLoudStaticLibraryPath)/$(SoLoudEmscriptenVersion)/*.a" />
+    <NativeFileReference Include="@(SoLoudStaticLibrary)" />
+  </ItemGroup>
+
+</Project>
