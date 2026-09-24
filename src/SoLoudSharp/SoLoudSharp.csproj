@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
     <PackageId>SoLoudSharp</PackageId>
-    <Description>Cross-platform .NET bindings for the SoLoud audio engine, with native binaries bundled for win-x64, linux-x64, osx-x64, and Android (arm64-v8a, armeabi-v7a, x86_64). Uses the self-contained miniaudio backend.</Description>
+    <Description>Cross-platform .NET bindings for the SoLoud audio engine, with native binaries bundled for win-x64, linux-x64, osx-x64, Android (arm64-v8a, armeabi-v7a, x86_64), and browser-wasm. Uses the self-contained miniaudio backend.</Description>
     <PackageTags>soloud;audio;sound;native;miniaudio;wav;mp3;ogg</PackageTags>
 
     <IsAotCompatible>true</IsAotCompatible>
@@ -61,13 +61,23 @@
       PackagePath="runtimes/android-x64/native/libsoloud.so"
       Condition="Exists('$(NativeArtifactsDir)android-x64\libsoloud.so')"
     />
+    <None
+      Include="$(MSBuildThisFileDirectory)..\..\build\SoLoudSharp.NativeAssets.WebAssembly.targets"
+      Pack="true"
+      PackagePath="buildTransitive/netstandard1.0/SoLoudSharp.targets"
+    />
+    <None
+      Include="$(NativeArtifactsDir)browser-wasm\**\*.a"
+      Pack="true"
+      PackagePath="buildTransitive/netstandard1.0/soloud.a/%(RecursiveDir)%(Filename)%(Extension)"
+    />
   </ItemGroup>
 
   <Target Name="WarnIfNoNatives" BeforeTargets="Pack" Condition="'$(SkipNativeWarning)' != 'true'">
     <Warning
       Code="SOLOUDNET001"
       Text="No native libraries found in $(NativeArtifactsDir). The package will ship without native binaries. Set NativeArtifactsDir or place artifacts in the expected layout. Set SkipNativeWarning=true to silence."
-      Condition="!Exists('$(NativeArtifactsDir)win-x64\soloud.dll') and !Exists('$(NativeArtifactsDir)linux-x64\libsoloud.so') and !Exists('$(NativeArtifactsDir)osx-x64\libsoloud.dylib') and !Exists('$(NativeArtifactsDir)android-arm64\libsoloud.so') and !Exists('$(NativeArtifactsDir)android-arm\libsoloud.so') and !Exists('$(NativeArtifactsDir)android-x64\libsoloud.so')"
+      Condition="!Exists('$(NativeArtifactsDir)win-x64\soloud.dll') and !Exists('$(NativeArtifactsDir)linux-x64\libsoloud.so') and !Exists('$(NativeArtifactsDir)osx-x64\libsoloud.dylib') and !Exists('$(NativeArtifactsDir)android-arm64\libsoloud.so') and !Exists('$(NativeArtifactsDir)android-arm\libsoloud.so') and !Exists('$(NativeArtifactsDir)android-x64\libsoloud.so') and !Exists('$(NativeArtifactsDir)browser-wasm')"
     />
   </Target>
 </Project>

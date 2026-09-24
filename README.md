@@ -1,12 +1,12 @@
 # SoLoudSharp
 
-Cross-platform .NET bindings for the [SoLoud](https://github.com/jarikomppa/soloud) audio engine, with native binaries bundled for `win-x64`, `linux-x64`, `osx-x64`, and Android (`android-arm64`, `android-arm`, `android-x64`). The native build uses SoLoud's built-in [miniaudio](https://github.com/mackron/miniaudio) backend, so the package has no external runtime dependencies.
+Cross-platform .NET bindings for the [SoLoud](https://github.com/jarikomppa/soloud) audio engine, with native binaries bundled for `win-x64`, `linux-x64`, `osx-x64`, Android (`android-arm64`, `android-arm`, `android-x64`) and `browser-wasm`. The native build uses SoLoud's built-in [miniaudio](https://github.com/mackron/miniaudio) backend, so the package has no external runtime dependencies.
 
 ## Packages
 
 | Package | Contents |
 |---|---|
-| `SoLoudSharp` | Managed bindings (`net8.0`/`net10.0`) plus `soloud.dll` / `libsoloud.so` / `libsoloud.dylib` (incl. Android `.so` for arm64-v8a, armeabi-v7a, x86_64) under `runtimes/{rid}/native/`. AOT-compatible. |
+| `SoLoudSharp` | Managed bindings (`net8.0`/`net10.0`) plus `soloud.dll` / `libsoloud.so` / `libsoloud.dylib` (incl. Android `.so` for arm64-v8a, armeabi-v7a, x86_64) under `runtimes/{rid}/native/`, and a `browser-wasm` static `soloud.a` a `buildTransitive` `.targets` links in. AOT-compatible. |
 
 ## Quick start
 
@@ -53,12 +53,13 @@ pwsh build/build-native-win.ps1                  # Windows
 bash build/build-native-unix.sh linux-x64        # Linux
 bash build/build-native-unix.sh osx-x64          # macOS
 bash build/build-native-android.sh android-arm64 # Android (also: android-arm, android-x64)
+bash build/build-native-wasm.sh                  # browser-wasm (needs the wasm-tools workload)
 
 # 3. Build the managed solution.
 dotnet build SoLoudSharp.sln
 ```
 
-Output is staged into `artifacts/native/{rid}/` and packed into the NuGet package via the `runtimes/{rid}/native/` convention.
+Output is staged into `artifacts/native/{rid}/` and packed into the NuGet package via the `runtimes/{rid}/native/` convention. `browser-wasm` is the exception: a wasm app links the archive into `dotnet.native.wasm` at publish rather than loading it at runtime, so it ships under `buildTransitive/netstandard1.0/soloud.a/<emscripten-version>/`, and the archive only links against a .NET runtime pack built with that same emscripten.
 
 When working only on the managed side (no native binaries available), suppress the pack-time warning with:
 
