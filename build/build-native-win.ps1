@@ -21,6 +21,10 @@ param(
 $ErrorActionPreference = 'Stop'
 $repo = Resolve-Path "$PSScriptRoot/.."
 $soloud = Join-Path $repo 'external/soloud'
+# __FILE__ names sources relative to the repo, and the DLL names its PDB by file name only.
+$repoSlashed = "$repo" -replace '\\', '/'
+$env:CL = "$env:CL /d1trimfile:$repo /d1trimfile:$repoSlashed".Trim()
+$env:LINK = "$env:LINK /PDBALTPATH:%_PDB%".Trim()
 
 if (!(Test-Path (Join-Path $soloud 'include/soloud.h'))) {
     Write-Error "SoLoud submodule missing at $soloud. Run bootstrap.ps1 first."
@@ -85,6 +89,14 @@ if ($dumpbin) {
 else {
     Write-Warning "dumpbin.exe not in PATH; skipping symbol-export check."
 }
+
+$text = [System.Text.Encoding]::Latin1.GetString([System.IO.File]::ReadAllBytes((Join-Path $nativeOut 'soloud.dll')))
+foreach ($root in @("$repo", $repoSlashed)) {
+    if ($text.IndexOf($root, [System.StringComparison]::OrdinalIgnoreCase) -ge 0) {
+        Write-Error "soloud.dll embeds the build path $root."
+    }
+}
+Write-Host "[build-native-win] path check OK: no build paths in soloud.dll."
 
 $global:LASTEXITCODE = 0
 exit 0
