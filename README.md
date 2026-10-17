@@ -1,6 +1,6 @@
 # SoLoudSharp
 
-Cross-platform .NET bindings for the [SoLoud](https://github.com/jarikomppa/soloud) audio engine, with native binaries bundled for `win-x64`, `linux-x64`, `osx-x64`, Android (`android-arm64`, `android-arm`, `android-x64`) and `browser-wasm`. The native build uses SoLoud's built-in [miniaudio](https://github.com/mackron/miniaudio) backend, so the package has no external runtime dependencies.
+Cross-platform .NET bindings for the [SoLoud](https://github.com/jarikomppa/soloud) audio engine, with native binaries bundled for `win-x64`, `linux-x64`, `osx-x64`, `osx-arm64`, Android (`android-arm64`, `android-arm`, `android-x64`) and `browser-wasm`. The native build uses SoLoud's built-in [miniaudio](https://github.com/mackron/miniaudio) backend, so the package has no external runtime dependencies.
 
 ## Packages
 
@@ -51,7 +51,8 @@ pwsh build/bootstrap.ps1
 # 2. Build the native shared library for your platform.
 pwsh build/build-native-win.ps1                  # Windows
 bash build/build-native-unix.sh linux-x64        # Linux
-bash build/build-native-unix.sh osx-x64          # macOS
+bash build/build-native-unix.sh osx-x64          # macOS (Intel)
+bash build/build-native-unix.sh osx-arm64        # macOS (Apple silicon)
 bash build/build-native-android.sh android-arm64 # Android (also: android-arm, android-x64)
 bash build/build-native-wasm.sh                  # browser-wasm (needs the wasm-tools workload)
 

@@ -2,12 +2,12 @@
 # Builds libsoloud.{so,dylib} on Linux or macOS using CMake + miniaudio backend.
 #
 # Usage: build-native-unix.sh <rid>
-# Where <rid> is one of: linux-x64, osx-x64
+# Where <rid> is one of: linux-x64, osx-x64, osx-arm64
 set -euo pipefail
 
 if [ "$#" -ne 1 ]; then
     echo "Usage: $0 <rid>" >&2
-    echo "  rid: linux-x64 | osx-x64" >&2
+    echo "  rid: linux-x64 | osx-x64 | osx-arm64" >&2
     exit 1
 fi
 
@@ -24,6 +24,10 @@ case "$RID" in
         LIB_EXT="dylib"
         # Bake in a deployment target compatible with current macOS runners.
         EXTRA_CMAKE_ARGS=(-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 -DCMAKE_OSX_ARCHITECTURES=x86_64)
+        ;;
+    osx-arm64)
+        LIB_EXT="dylib"
+        EXTRA_CMAKE_ARGS=(-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 -DCMAKE_OSX_ARCHITECTURES=arm64)
         ;;
     *)
         echo "Unsupported RID: $RID" >&2

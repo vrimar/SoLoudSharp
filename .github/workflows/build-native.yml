@@ -36,6 +36,9 @@ jobs:
           - rid: osx-x64
             runner: macos-latest
             script: bash build/build-native-unix.sh osx-x64
+          - rid: osx-arm64
+            runner: macos-latest
+            script: bash build/build-native-unix.sh osx-arm64
           - rid: android-arm64
             runner: ubuntu-22.04
             script: bash build/build-native-android.sh android-arm64
