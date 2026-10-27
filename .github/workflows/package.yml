@@ -32,17 +32,17 @@ jobs:
 
     steps:
       - name: Checkout (with submodules)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           submodules: recursive
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
 
       - name: Download all native artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: soloud-native-*
           path: artifacts/native/
@@ -76,7 +76,7 @@ jobs:
           dotnet pack src/SoLoudSharp/SoLoudSharp.csproj -c Release -p:Version=${{ steps.version.outputs.value }} -o packages
 
       - name: Upload nupkgs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: nupkgs
           path: packages/
@@ -91,12 +91,12 @@ jobs:
 
     steps:
       - name: Set up .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 10.0.x
 
       - name: Download nupkgs
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: nupkgs
           path: packages/

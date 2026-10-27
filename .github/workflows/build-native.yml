@@ -57,7 +57,7 @@ jobs:
 
     steps:
       - name: Checkout (with submodules)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           submodules: recursive
 
@@ -66,11 +66,11 @@ jobs:
 
       - name: Set up MSVC (Windows)
         if: matrix.rid == 'win-x64'
-        uses: microsoft/setup-msbuild@v2
+        uses: microsoft/setup-msbuild@v3
 
       - name: Set up .NET
         if: matrix.workload
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: ${{ matrix.dotnet }}
 
@@ -84,7 +84,7 @@ jobs:
         run: ${{ matrix.script }}
 
       - name: Upload SoLoud shared library
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: soloud-native-${{ matrix.rid }}
           path: artifacts/native/${{ matrix.rid }}/
